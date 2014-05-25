@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.ko2ic</groupId>
+    <artifactId>project-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <groupId>com.github.ko2ic</groupId>
+  <artifactId>project1</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>project1</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <root.basedir>${project.parent.basedir}</root.basedir>
+  </properties>
+
+
+  <profiles>
+    <profile>
+      <id>conf</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>set-custom-property</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <source>
+                    project.properties.setProperty('main.basedir',
+                    project.parent.basedir.toString())
+                  </source>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>1.9.3</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <phase>process-resources</phase>
+                <configuration>
+                  <target>
+                    <!-- fileに${project.parent.basedir}を記述しても展開してくれない。maven-antrun-pluginがサポートしていないっぽい。親のpom.xmlに記述しても展開されないようで駄目でした -->
+                    <property name="rootDir" location="${root.basedir}" />
+                    <copy file="${main.basedir}/config/checkstyle-config.xml" tofile="${eclipse.workspace}/.metadata/.plugins/net.sf.eclipsecs.core/checkstyle-config.xml" overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.jdt.ui.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs"
+                      overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.ui.editors.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.editors.prefs"
+                      overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.wst.xml.core.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.wst.xml.core.prefs"
+                      overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.jst.jsp.core.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jst.jsp.core.prefs"
+                      overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.wst.css.core.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.wst.css.core.prefs"
+                      overwrite="true" />
+                    <copy file="${main.basedir}/config/org.eclipse.wst.html.core.prefs" tofile="${eclipse.workspace}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.wst.html.core.prefs"
+                      overwrite="true" />
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
