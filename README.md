@@ -1,0 +1,2 @@
+spike-maven-eclipse-config
+==========================
